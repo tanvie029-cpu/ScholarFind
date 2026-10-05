@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ScholarFind | Scholarship Finder
+    </title>
+
+    <meta
+        name="description"
+        content="ScholarFind helps students discover relevant scholarships using intelligent search and ranking."
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a
+            href="{{ url_for('home') }}"
+            class="brand"
+        >
+
+            <span class="brand-mark">
+                S
+            </span>
+
+            <span class="brand-text">
+
+                <strong>
+                    ScholarFind
+                </strong>
+
+                <small>
+                    Scholarship Finder
+                </small>
+
+            </span>
+
+        </a>
+
+
+        <div class="ai-pill">
+
+            <span class="status-dot"></span>
+
+            AI-Powered Search
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-container">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+
+                <span>✦</span>
+
+                SMART SCHOLARSHIP DISCOVERY
+
+            </div>
+
+
+            <h1>
+
+                Find scholarships
+
+                <span>
+                    made for you.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Discover relevant scholarships faster.
+                Search naturally, refine your preferences,
+                and let ScholarFind rank the best opportunities
+                for you.
+
+            </p>
+
+
+            <div class="hero-stats">
+
+                <div>
+
+                    <strong>
+                        {{ total_scholarships }}+
+                    </strong>
+
+                    <span>
+                        Scholarships
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        AI
+                    </strong>
+
+                    <span>
+                        Smart ranking
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        100%
+                    </strong>
+
+                    <span>
+                        Free search
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SEARCH PANEL -->
+
+        <div class="search-panel">
+
+
+            <div class="search-heading">
+
+                <div>
+
+                    <span class="mini-label">
+                        START YOUR SEARCH
+                    </span>
+
+                    <h2>
+                        What scholarship are you looking for?
+                    </h2>
+
+                </div>
+
+                <div class="search-heading-icon">
+                    ⌕
+                </div>
+
+            </div>
+
+
+
+            <form
+                method="POST"
+                class="search-form"
+                id="search-form"
+            >
+
+
+                <!-- SEARCH -->
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        ⌕
+                    </span>
+
+                    <input
+                        type="text"
+                        name="query"
+                        value="{{ query }}"
+                        placeholder="Try: engineering scholarship"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="submit"
+                        class="search-button"
+                    >
+
+                        <span>
+                            Search
+                        </span>
+
+                        <span class="button-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- FILTER HEADING -->
+
+                <div class="filter-heading">
+
+                    <div>
+
+                        <strong>
+                            Refine your results
+                        </strong>
+
+                        <span>
+                            Use any filters that matter to you.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="clear-filters"
+                        id="clear-filters"
+                    >
+                        Clear filters
+                    </button>
+
+                </div>
+
+
+
+                <!-- FILTERS -->
+
+                <div class="filter-grid">
+
+
+                    <!-- COURSE -->
+
+                    <label class="filter-field">
+
+                        <span>
+                            Course
+                        </span>
+
+                        <select name="course">
+
+                            <option value="">
+                                All courses
+                            </option>
+
+                            {% for value in course_values %}
+
+                            <option
+                                value="{{ value }}"
+                                {% if selected_course == value %}selected{% endif %}
+                            >
+                                {{ value }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- CATEGORY -->
+
+                    <label class="filter-field">
+
+                        <span>
+                            Category
+                        </span>
+
+                        <select name="category">
+
+                            <option value="">
+                                All categories
+                            </option>
+
+                            {% for value in category_values %}
+
+                            <option
+                                value="{{ value }}"
+                                {% if selected_category == value %}selected{% endif %}
+                            >
+                                {{ value }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- GENDER -->
+
+                    <label class="filter-field">
+
+                        <span>
+                            Gender
+                        </span>
+
+                        <select name="gender">
+
+                            <option value="">
+                                Any gender
+                            </option>
+
+                            {% for value in gender_values %}
+
+                            <option
+                                value="{{ value }}"
+                                {% if selected_gender == value %}selected{% endif %}
+                            >
+                                {{ value }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- STATE -->
+
+                    <label class="filter-field">
+
+                        <span>
+                            State / Region
+                        </span>
+
+                        <select name="state">
+
+                            <option value="">
+                                All regions
+                            </option>
+
+                            {% for value in state_values %}
+
+                            <option
+                                value="{{ value }}"
+                                {% if selected_state == value %}selected{% endif %}
+                            >
+                                {{ value }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- INCOME -->
+
+                    <label class="filter-field">
+
+                        <span>
+                            Maximum family income
+                        </span>
+
+                        <select name="max_income">
+
+                            <option value="">
+                                No limit
+                            </option>
+
+                            <option
+                                value="250000"
+                                {% if selected_income == "250000" %}selected{% endif %}
+                            >
+                                ₹2.5 lakh
+                            </option>
+
+                            <option
+                                value="350000"
+                                {% if selected_income == "350000" %}selected{% endif %}
+                            >
+                                ₹3.5 lakh
+                            </option>
+
+                            <option
+                                value="450000"
+                                {% if selected_income == "450000" %}selected{% endif %}
+                            >
+                                ₹4.5 lakh
+                            </option>
+
+                            <option
+                                value="600000"
+                                {% if selected_income == "600000" %}selected{% endif %}
+                            >
+                                ₹6 lakh
+                            </option>
+
+                            <option
+                                value="800000"
+                                {% if selected_income == "800000" %}selected{% endif %}
+                            >
+                                ₹8 lakh
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- PERCENTAGE -->
+
+                    <label class="filter-field">
+
+                        <span>
+                            Minimum percentage
+                        </span>
+
+                        <select name="min_percentage">
+
+                            <option value="">
+                                Any percentage
+                            </option>
+
+                            <option
+                                value="40"
+                                {% if selected_percentage == "40" %}selected{% endif %}
+                            >
+                                40% or above
+                            </option>
+
+                            <option
+                                value="50"
+                                {% if selected_percentage == "50" %}selected{% endif %}
+                            >
+                                50% or above
+                            </option>
+
+                            <option
+                                value="60"
+                                {% if selected_percentage == "60" %}selected{% endif %}
+                            >
+                                60% or above
+                            </option>
+
+                            <option
+                                value="70"
+                                {% if selected_percentage == "70" %}selected{% endif %}
+                            >
+                                70% or above
+                            </option>
+
+                            <option
+                                value="80"
+                                {% if selected_percentage == "80" %}selected{% endif %}
+                            >
+                                80% or above
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+                </div>
+
+            </form>
+
+
+
+            <!-- POPULAR SEARCHES -->
+
+            <div class="popular-searches">
+
+                <span>
+                    Popular:
+                </span>
+
+                <button
+                    type="button"
+                    data-search="engineering scholarship"
+                >
+                    Engineering
+                </button>
+
+                <button
+                    type="button"
+                    data-search="female student scholarship"
+                >
+                    Women students
+                </button>
+
+                <button
+                    type="button"
+                    data-search="SC scholarship"
+                >
+                    SC
+                </button>
+
+                <button
+                    type="button"
+                    data-search="merit scholarship"
+                >
+                    Merit
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RESULTS
+===================================================== -->
+
+{% if searched %}
+
+<section
+    class="results-section"
+    id="results"
+>
+
+    <div class="content-container">
+
+
+        <div class="results-heading">
+
+            <div>
+
+                <span class="section-kicker">
+                    SEARCH RESULTS
+                </span>
+
+                <h2>
+
+                    {% if results %}
+
+                        Best matches for you
+
+                    {% else %}
+
+                        No matching scholarships
+
+                    {% endif %}
+
+                </h2>
+
+                <p>
+
+                    {% if results %}
+
+                        Results ranked using intelligent relevance scoring.
+
+                    {% else %}
+
+                        Try a broader search or remove a filter.
+
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+
+            <div class="results-count">
+
+                <strong>
+                    {{ results|length }}
+                </strong>
+
+                <span>
+                    results
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        {% if results %}
+
+
+        <div class="results-grid">
+
+
+            {% for scholarship in results %}
+
+
+            <article class="scholarship-card">
+
+
+                <div class="card-top">
+
+                    <div class="provider">
+
+                        <span class="provider-icon">
+                            ✦
+                        </span>
+
+                        {{ scholarship.provider }}
+
+                    </div>
+
+
+                    <span class="match-badge">
+
+                        {{ "%.0f"|format(scholarship.match_score * 100) }}% match
+
+                    </span>
+
+                </div>
+
+
+
+                <h3>
+                    {{ scholarship.name }}
+                </h3>
+
+
+
+                <p class="description">
+                    {{ scholarship.description }}
+                </p>
+
+
+
+                <!-- TAGS -->
+
+                <div class="tags">
+
+                    {% if scholarship.course %}
+
+                    <span class="tag">
+                        🎓 {{ scholarship.course }}
+                    </span>
+
+                    {% endif %}
+
+
+                    {% if scholarship.category %}
+
+                    <span class="tag">
+                        ◉ {{ scholarship.category }}
+                    </span>
+
+                    {% endif %}
+
+
+                    {% if scholarship.state %}
+
+                    <span class="tag">
+                        ⌖ {{ scholarship.state }}
+                    </span>
+
+                    {% endif %}
+
+
+                    {% if scholarship.level %}
+
+                    <span class="tag">
+                        ▣ {{ scholarship.level }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- DETAILS -->
+
+                <div class="card-details">
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            AWARD
+                        </span>
+
+                        <strong>
+                            ₹{{ scholarship.amount }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            ELIGIBILITY
+                        </span>
+
+                        <strong>
+                            {{ scholarship.eligibility }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            DEADLINE
+                        </span>
+
+                        <strong>
+                            {{ scholarship.deadline }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- RELEVANCE -->
+
+                <div class="relevance-row">
+
+                    <div class="score-area">
+
+                        <span>
+                            Relevance
+                        </span>
+
+                        <div class="score-track">
+
+                            <span
+                                class="score-fill"
+                                data-score="{{ scholarship.match_score * 100 }}"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <strong>
+
+                        {{ "%.0f"|format(scholarship.match_score * 100) }}%
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <div class="card-actions">
+
+                    {% if scholarship.link %}
+
+                    <a
+                        href="{{ scholarship.link }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="view-button"
+                    >
+
+                        View application
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+                    {% else %}
+
+                    <span class="unavailable">
+                        Application link unavailable
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+            </article>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- EMPTY -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ⌕
+            </div>
+
+            <h3>
+                Nothing matched those filters
+            </h3>
+
+            <p>
+                Try searching for
+                <strong>engineering scholarship</strong>
+                or remove one of the filters.
+            </p>
+
+            <button
+                type="button"
+                class="secondary-button"
+                id="empty-reset"
+            >
+                Reset search
+            </button>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+
+{% else %}
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="how-section">
+
+    <div class="content-container">
+
+
+        <div class="section-heading-centered">
+
+            <span class="section-kicker">
+                HOW SCHOLARFIND WORKS
+            </span>
+
+            <h2>
+                From search to shortlist in seconds.
+            </h2>
+
+            <p>
+                A simple interface backed by an intelligent
+                scholarship ranking system.
+            </p>
+
+        </div>
+
+
+
+        <div class="steps-grid">
+
+
+            <article class="step-card">
+
+                <span class="step-number">
+                    01
+                </span>
+
+                <div class="step-icon">
+                    ⌕
+                </div>
+
+                <h3>
+                    Describe what you need
+                </h3>
+
+                <p>
+                    Search naturally using a course,
+                    scholarship type, student group,
+                    or eligibility requirement.
+                </p>
+
+            </article>
+
+
+
+            <article class="step-card">
+
+                <span class="step-number">
+                    02
+                </span>
+
+                <div class="step-icon">
+                    ≡
+                </div>
+
+                <h3>
+                    Refine the results
+                </h3>
+
+                <p>
+                    Use course, category, gender,
+                    income, percentage and region
+                    filters to narrow your options.
+                </p>
+
+            </article>
+
+
+
+            <article class="step-card">
+
+                <span class="step-number">
+                    03
+                </span>
+
+                <div class="step-icon">
+                    ↗
+                </div>
+
+                <h3>
+                    Explore your matches
+                </h3>
+
+                <p>
+                    Scholarships are ranked by relevance
+                    so useful opportunities appear first.
+                </p>
+
+            </article>
+
+
+        </div>
+
+
+
+        <div class="technology-strip">
+
+            <div>
+
+                <span>
+                    POWERED BY
+                </span>
+
+                <strong>
+                    Python · Flask · Pandas · Scikit-learn
+                </strong>
+
+            </div>
+
+            <div class="tech-badge">
+                TF-IDF + Cosine Similarity
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+{% endif %}
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="content-container footer-inner">
+
+        <div class="footer-brand">
+
+            <span class="brand-mark small">
+                S
+            </span>
+
+            <div>
+
+                <strong>
+                    ScholarFind
+                </strong>
+
+                <span>
+                    Scholarship Finder & Ranker
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-note">
+
+            <span>
+                Academic Information Retrieval Project
+            </span>
+
+            <span>
+                © 2026 ScholarFind
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+
+</body>
+
+</html>
